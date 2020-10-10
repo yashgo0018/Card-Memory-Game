@@ -98,11 +98,13 @@ def check_click(db, user, pos):
         user_id=user.id, active=True).first()
 
     # If no active game starts the game
+
     if desk is None:
+    
         desk = crud.new_game(db, user)
     
     # Get the cards
-    cards = desk.cards
+    cards = db.query(models.Card).filter_by(desk_id=desk.id).order_by(models.Card.id)
     clicked_card = cards[pos]
     value = clicked_card.value
 
@@ -132,6 +134,7 @@ def check_click(db, user, pos):
             db.commit()
             # If all 12 cards are matched then game over
             if len(list(filter(lambda card: card.correct, desk.cards))) == 12:
+            
                 game_over(db, desk)
                 return value, desk.clicks, True
             return value, desk.clicks, False
@@ -166,10 +169,13 @@ manager = ConnectionManager()
 
 # Sends the player best and global best scores(when game starts or someone wins)
 async def send_best_scores(websocket, user, db):
-    best_score = db.query(models.Desk).filter_by(solved=True).order_by(models.Desk.clicks)[0].clicks
-    player_best_score = db.query(models.Desk).filter_by(solved=True, user_id=user.id).order_by(models.Desk.clicks)[0].clicks
-    await manager.broadcast(f"Global Best is {best_score}")
-    await manager.send_personal_message(f"Player Best is {player_best_score}", websocket)
+    try:
+        best_score = db.query(models.Desk).filter_by(solved=True).order_by(models.Desk.clicks)[0].clicks
+        player_best_score = db.query(models.Desk).filter_by(solved=True, user_id=user.id).order_by(models.Desk.clicks)[0].clicks
+        await manager.broadcast(f"Global Best is {best_score}")
+        await manager.send_personal_message(f"Player Best is {player_best_score}", websocket)
+    except:
+        pass
 
 # This manages the websocket clients
 @app.websocket("/api/game")
@@ -178,7 +184,6 @@ async def game(websocket: WebSocket, db: Session = Depends(get_db)):
     # First User is retieved
     token = await websocket.receive_text()
     user = await get_current_user(token, db)
-
     # sends the best scores
     await send_best_scores(websocket, user, db)
     try:

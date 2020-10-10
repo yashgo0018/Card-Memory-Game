@@ -12,7 +12,7 @@ class HomePage extends Component {
 
     constructor(props) {
         super(props);
-        this.client = new W3CWebSocket(`ws://${HOSTNAME}/api/game`);
+        this.client = new W3CWebSocket(`ws://${HOSTNAME}:8000/api/game`);
     }
 
     state = {
@@ -77,7 +77,6 @@ class HomePage extends Component {
         } else {
             startNewGame();
             this.client.onopen = () => {
-                console.log("Websocket Connected");
                 this.client.send(localStorage.getItem("token"))
             }
             this.client.onmessage = (message) => {
@@ -92,6 +91,7 @@ class HomePage extends Component {
                 }
                 const data = JSON.parse(msg);
                 const { cards } = this.state;
+
                 cards[data.pos].value = data.value;
                 const counter = [0, 0, 0, 0, 0, 0, 0];
                 let filteredCards = cards.filter(card => card.value != 0);
@@ -136,11 +136,11 @@ class HomePage extends Component {
                     </div>
                     <div className="md:flex-grow">
                         <div className="flex flex-wrap mb-4">
-                            {cards.map((card, i) =>
+                            {cards.map((card) =>
                                 card.value == 0 ?
-                                    <div className="md:w-1/5 sm:w-1/4 w-1/3 mr-10 mb-10" key={i} style={{ height: '220px', backgroundColor: '#543', borderRadius: '10px', boxShadow: '10px 10px 20px #432' }} onClick={() => { this.cardClick(i) }}></div>
+                                    <div className="md:w-1/5 sm:w-1/4 w-1/3 mr-10 mb-10" key={card.id} style={{ height: '220px', backgroundColor: '#543', borderRadius: '10px', boxShadow: '10px 10px 20px #432' }} onClick={() => { this.cardClick(card.id) }}></div>
                                     :
-                                    <div className="w-1/5 mr-10 mb-10" key={i} style={{ height: '220px', backgroundColor: '#987', textAlign: 'center', verticalAlign: 'middle', lineHeight: '220px', fontSize: '50px', fontWeight: 'bold', color: '#000', borderRadius: '10px', boxShadow: '10px 10px 20px #432' }}>{card.value}</div>
+                                    <div className="w-1/5 mr-10 mb-10" key={card.id} style={{ height: '220px', backgroundColor: '#987', textAlign: 'center', verticalAlign: 'middle', lineHeight: '220px', fontSize: '50px', fontWeight: 'bold', color: '#000', borderRadius: '10px', boxShadow: '10px 10px 20px #432' }}>{card.value}</div>
                             )}
                         </div>
                     </div>

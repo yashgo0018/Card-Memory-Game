@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: docker/prod/backend/Dockerfile
     volumes:
-      - ./app:/app
+      - ./backend:/app
     ports:
       - 8000:8000
     command: uvicorn app.main:app --port 8000 --host 0.0.0.0

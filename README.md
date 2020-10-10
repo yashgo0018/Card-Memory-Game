@@ -12,3 +12,11 @@ This is a memory based game. The player who takes the least amount of clicks to 
 7. CD into the main folder
 8. Run `docker-compose build`
 9. Run `docker-compose up`
+10. Expose post 80 and 8000 from the server
+
+### Gallery
+![Home](./github_images/home.png)
+![One Card](./github_images/one_card.png)
+![Three Cards](./github_images/three_cards.png)
+![Login](./github_images/login.png)
+![Register](./github_images/register.png)
