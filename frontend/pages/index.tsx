@@ -5,7 +5,7 @@ import Sidebar from '../components/sidebar';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { startNewGame } from '../services/game';
 
-const HOSTNAME = "localhost";
+const HOSTNAME = "104.198.186.123";
 
 class HomePage extends Component {
     client: W3CWebSocket;
