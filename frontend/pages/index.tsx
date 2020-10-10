@@ -5,12 +5,14 @@ import Sidebar from '../components/sidebar';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { startNewGame } from '../services/game';
 
+const HOSTNAME = "localhost";
+
 class HomePage extends Component {
     client: W3CWebSocket;
 
     constructor(props) {
         super(props);
-        this.client = new W3CWebSocket(`ws://localhost/api/game`);
+        this.client = new W3CWebSocket(`ws://${HOSTNAME}/api/game`);
     }
 
     state = {

@@ -9,3 +9,7 @@ This is a memory based game. The player who takes the least amount of clicks to 
 4. Create a file `.env` inside the main folder
 5. Generate a secret key by `openssl rand -hex 32` 
 6. Create a variable `SECRET_KEY` in the `.env` file as `SECRET_KEY={}` where `{}` will be replaced by the secret key.
+7. CD into the main folder
+8. Run `docker-compose build`
+9. Run `docker-compose up`
+10. Change the hostname in `frontend/pages/index.tsx`
