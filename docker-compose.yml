@@ -1,0 +1,51 @@
+version: "3"
+volumes:
+  pgdata:
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/prod/backend/Dockerfile
+    volumes:
+      - ./app:/app
+    ports:
+      - 8000:8000
+    command: uvicorn app.main:app --port 8000 --host 0.0.0.0
+    depends_on:
+      - postgres
+    env_file: .env
+    environment:
+      PRODUCTION: 1
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/prod/frontend/Dockerfile
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - 3000:3000
+    command: npm start
+    depends_on:
+      - backend
+    environment:
+      PRODUCTION: 1
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: cardgame
+      POSTGRES_DB: cardgame
+      POSTGRES_PASSWORD: HJeWEh&oafRI
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  nginx:
+    build:
+      dockerfile: ./docker/prod/nginx/Dockerfile
+      context: .
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - backend
+      - frontend

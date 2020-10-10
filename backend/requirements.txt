@@ -1,0 +1,6 @@
+fastapi[all]
+python-jose[cryptography]
+passlib[bcrypt]
+python-dotenv
+SQLAlchemy
+psycopg2
